@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AudioPlayer</string>
+    <color name="player_background">#000000</color>
 </resources>
