@@ -28,6 +28,20 @@
             android:layout_marginTop="10dp"/>
     </LinearLayout>
 
+    <!-- Album Cover -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center"
+        android:layout_below="@id/player_header_bg">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/default_cover"/>
+    </LinearLayout>
+
     <!-- Player Footer -->
     <LinearLayout
         android:id="@+id/player_footer_bg"
