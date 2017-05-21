@@ -105,4 +105,18 @@
                 android:scaleType="fitCenter"/>
         </LinearLayout>
     </LinearLayout>
+
+    <!-- Progress bar -->
+    <SeekBar
+        android:id="@+id/progressBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@id/player_footer_bg"
+        android:thumb="@drawable/progress_handler"
+        android:progressDrawable="@drawable/progress_bar"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"/>
 </RelativeLayout>
