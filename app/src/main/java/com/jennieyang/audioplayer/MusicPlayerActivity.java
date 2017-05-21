@@ -26,6 +26,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private ArrayList<HashMap<String, String>> audioList = new ArrayList<HashMap<String, String>>();
 
+    private int seekForwardTime = 5000; // 5000 milliseconds
+    private int seekBackwardTime = 5000; // 5000 milliseconds
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,23 +55,33 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View arg0) {
-                // check for already playing
+            public void onClick(View v) {
                 if(mediaPlayer.isPlaying()){
+                    // audio is already playing, so pause it and change pause button to play
                     if(mediaPlayer !=null){
                         mediaPlayer.pause();
-                        // Changing button image to play button
                         btnPlay.setImageResource(R.drawable.btn_play);
                     }
-                }else{
-                    // Resume song
+                } else {
+                    // audio is paused, so resume playing it and change play button to pause
                     if(mediaPlayer !=null){
                         mediaPlayer.start();
-                        // Changing button image to pause button
                         btnPlay.setImageResource(R.drawable.btn_pause);
                     }
                 }
 
+            }
+        });
+
+        btnForward.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int currentPosition = mediaPlayer.getCurrentPosition();
+                // forward audio by 5 seconds if possible, else forward to the end
+                if (currentPosition + seekForwardTime <= mediaPlayer.getDuration()) {
+                    mediaPlayer.seekTo(currentPosition + seekForwardTime);
+                } else {
+                    mediaPlayer.seekTo(mediaPlayer.getDuration());
+                }
             }
         });
 
