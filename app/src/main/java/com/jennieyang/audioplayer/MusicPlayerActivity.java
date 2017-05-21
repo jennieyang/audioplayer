@@ -26,8 +26,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private ArrayList<HashMap<String, String>> audioList = new ArrayList<HashMap<String, String>>();
 
-    private int seekForwardTime = 5000; // 5000 milliseconds
-    private int seekBackwardTime = 5000; // 5000 milliseconds
+    private int SKIP_TIME = 5000; // 5000 milliseconds forward or backwards
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,15 +75,26 @@ public class MusicPlayerActivity extends AppCompatActivity {
         btnForward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 int currentPosition = mediaPlayer.getCurrentPosition();
-                // forward audio by 5 seconds if possible, else forward to the end
-                if (currentPosition + seekForwardTime <= mediaPlayer.getDuration()) {
-                    mediaPlayer.seekTo(currentPosition + seekForwardTime);
+                // skip forward audio by 5 seconds if possible, else skip to the end
+                if (currentPosition + SKIP_TIME <= mediaPlayer.getDuration()) {
+                    mediaPlayer.seekTo(currentPosition + SKIP_TIME);
                 } else {
                     mediaPlayer.seekTo(mediaPlayer.getDuration());
                 }
             }
         });
 
+        btnBackward.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int currentPosition = mediaPlayer.getCurrentPosition();
+                // skip back audio by 5 seconds if possible, else skip back to the start
+                if (currentPosition - SKIP_TIME >= 0) {
+                    mediaPlayer.seekTo(currentPosition - SKIP_TIME);
+                } else {
+                    mediaPlayer.seekTo(0);
+                }
+            }
+        });
     }
 
     public void playAudio() {
