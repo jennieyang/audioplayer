@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -30,10 +31,10 @@ public class MusicPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player);
 
+        // request permissions from user
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
-
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 return;
             }
@@ -48,6 +49,29 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
         mediaPlayer = new MediaPlayer();
         playAudio();
+
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                // check for already playing
+                if(mediaPlayer.isPlaying()){
+                    if(mediaPlayer !=null){
+                        mediaPlayer.pause();
+                        // Changing button image to play button
+                        btnPlay.setImageResource(R.drawable.btn_play);
+                    }
+                }else{
+                    // Resume song
+                    if(mediaPlayer !=null){
+                        mediaPlayer.start();
+                        // Changing button image to pause button
+                        btnPlay.setImageResource(R.drawable.btn_pause);
+                    }
+                }
+
+            }
+        });
+
     }
 
     public void playAudio() {
