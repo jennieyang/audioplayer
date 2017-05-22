@@ -5,10 +5,12 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -26,6 +28,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private ArrayList<HashMap<String, String>> audioList = new ArrayList<HashMap<String, String>>();
 
+    private SeekBar progressBar;
+    private Handler handler;
+    private ProgressHelper progressHelper;
     private int SKIP_TIME = 5000; // 5000 milliseconds forward or backwards
 
     @Override
@@ -48,8 +53,12 @@ public class MusicPlayerActivity extends AppCompatActivity {
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnPrevious = (ImageButton) findViewById(R.id.btnPrevious);
         audioTitleLabel = (TextView) findViewById(R.id.songTitle);
+        progressBar = (SeekBar) findViewById(R.id.progressBar);
 
         mediaPlayer = new MediaPlayer();
+        handler = new Handler();
+        progressHelper = new ProgressHelper();
+
         playAudio();
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
@@ -105,11 +114,29 @@ public class MusicPlayerActivity extends AppCompatActivity {
             mediaPlayer.start();
             String audioTitle = "Song";
             audioTitleLabel.setText(audioTitle);
-            btnPlay.setImageResource(R.drawable.btn_pause);
+            btnPlay.setImageResource(R.drawable.btn_pause); // change button image to pause
+
+            progressBar.setProgress(0);
+            progressBar.setMax(100);
+            updateProgressBar();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
+
+    public void updateProgressBar() {
+        handler.postDelayed(updateTimeTask, 100);
+    }
+
+    private Runnable updateTimeTask = new Runnable() {
+        public void run() {
+            int currentPosition = mediaPlayer.getCurrentPosition();
+            int totalDuration = mediaPlayer.getDuration();
+            int progress = progressHelper.getProgressPercentage(currentPosition, totalDuration);
+            progressBar.setProgress(progress);
+            handler.postDelayed(this, 100);
+        }
+    };
 }
