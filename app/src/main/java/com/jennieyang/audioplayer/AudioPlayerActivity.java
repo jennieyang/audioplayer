@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MusicPlayerActivity extends AppCompatActivity {
+public class AudioPlayerActivity extends AppCompatActivity {
     private ImageButton btnPlay;
     private ImageButton btnForward;
     private ImageButton btnBackward;
