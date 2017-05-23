@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AudioPlayerActivity extends AppCompatActivity {
+public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
     private ImageButton btnPlay;
     private ImageButton btnForward;
     private ImageButton btnBackward;
@@ -59,6 +59,7 @@ public class AudioPlayerActivity extends AppCompatActivity {
         handler = new Handler();
         progressHelper = new ProgressHelper();
 
+        progressBar.setOnSeekBarChangeListener(this);
         playAudio();
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +127,11 @@ public class AudioPlayerActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
+        // this is required to implement SeekBar.OnSeekBarChangeListener
+    }
+
     public void updateProgressBar() {
         handler.postDelayed(updateTimeTask, 100);
     }
@@ -139,4 +145,16 @@ public class AudioPlayerActivity extends AppCompatActivity {
             handler.postDelayed(this, 100);
         }
     };
+
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        handler.removeCallbacks(updateTimeTask); // prevents Handler from updating progress bar
+    }
+
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        handler.removeCallbacks(updateTimeTask);
+        int totalDuration = mediaPlayer.getDuration();
+        int currentPosition = progressHelper.progressToTime(seekBar.getProgress(), totalDuration);
+        mediaPlayer.seekTo(currentPosition); // play audio from selected position
+        updateProgressBar(); // update time progress again
+    }
 }
