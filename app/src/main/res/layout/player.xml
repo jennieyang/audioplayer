@@ -122,6 +122,8 @@
 
     <!-- Time Display -->
     <LinearLayout
+        android:id="@+id/timeDisplay"
+        android:layout_above="@id/progressBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"

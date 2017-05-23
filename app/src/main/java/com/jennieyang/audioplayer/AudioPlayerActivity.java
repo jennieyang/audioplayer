@@ -24,6 +24,8 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
     private ImageButton btnNext;
     private ImageButton btnPrevious;
     private TextView audioTitleLabel;
+    private TextView currentPositionLabel;
+    private TextView totalDurationLabel;
 
     private MediaPlayer mediaPlayer;
     private ArrayList<HashMap<String, String>> audioList = new ArrayList<HashMap<String, String>>();
@@ -53,6 +55,8 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnPrevious = (ImageButton) findViewById(R.id.btnPrevious);
         audioTitleLabel = (TextView) findViewById(R.id.songTitle);
+        currentPositionLabel = (TextView) findViewById(R.id.currentPositionLabel);
+        totalDurationLabel = (TextView) findViewById(R.id.totalDurationLabel);
         progressBar = (SeekBar) findViewById(R.id.progressBar);
 
         mediaPlayer = new MediaPlayer();
@@ -142,6 +146,9 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
             int totalDuration = mediaPlayer.getDuration();
             int progress = progressHelper.getProgressPercentage(currentPosition, totalDuration);
             progressBar.setProgress(progress);
+
+            currentPositionLabel.setText(progressHelper.millisecondsToTime(currentPosition));
+            totalDurationLabel.setText(progressHelper.millisecondsToTime(totalDuration));
             handler.postDelayed(this, 100);
         }
     };

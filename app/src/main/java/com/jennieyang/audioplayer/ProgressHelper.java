@@ -23,4 +23,30 @@ public class ProgressHelper {
         int currentPosition = (int) (percentage * totalDuration);
         return currentPosition;
     }
+
+    /**
+     * Convert milliseconds to a formatted time string
+     * @param ms: milliseconds
+     * @return formatted time string
+     */
+    public String millisecondsToTime(int ms) {
+        String timeString = "";
+        String secString;
+        int hr = ms / (1000*60*60); // hours
+        int min = (ms % (1000*60*60)) / (1000*60); // minutes
+        int sec = (ms % (1000*60*60)) % (1000*60) / 1000; // seconds
+
+        // prepend hours to timeString if applicable
+        if (hr > 0) {
+            timeString = hr + ":";
+        }
+        // prepend 0 to seconds display if it is only one digit
+        if (sec < 10) {
+            secString = "0" + sec;
+        } else {
+            secString = "" + sec;
+        }
+        timeString += min + ":" + secString;
+        return timeString;
+    }
 }
