@@ -153,10 +153,12 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
         }
     };
 
+    @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         handler.removeCallbacks(updateTimeTask); // prevents Handler from updating progress bar
     }
 
+    @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         handler.removeCallbacks(updateTimeTask);
         int totalDuration = mediaPlayer.getDuration();
