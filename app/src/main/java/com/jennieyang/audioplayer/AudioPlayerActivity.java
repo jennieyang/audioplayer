@@ -16,8 +16,9 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
-public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
+public class AudioPlayerActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
     private ImageButton btnPlay;
     private ImageButton btnForward;
     private ImageButton btnBackward;
@@ -35,6 +36,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
     private Handler handler;
     private ProgressHelper progressHelper;
     private int SKIP_TIME = 5000; // 5000 milliseconds forward or backwards
+    private int currentAudioIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,8 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
         audioList = audioManager.getPlayList();
 
         progressBar.setOnSeekBarChangeListener(this);
+        mediaPlayer.setOnCompletionListener(this);
+
         playAudio(0);
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
@@ -172,5 +176,12 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
         int currentPosition = progressHelper.progressToTime(seekBar.getProgress(), totalDuration);
         mediaPlayer.seekTo(currentPosition); // play audio from selected position
         updateProgressBar(); // update time progress again
+    }
+
+    public void onCompletion(MediaPlayer mp) {
+        // play a random song
+        Random rand = new Random();
+        currentAudioIndex = rand.nextInt(audioList.size() - 1);
+        playAudio(currentAudioIndex);
     }
 }
