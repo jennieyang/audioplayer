@@ -28,6 +28,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
     private TextView totalDurationLabel;
 
     private MediaPlayer mediaPlayer;
+    private AudioManager audioManager;
     private ArrayList<HashMap<String, String>> audioList = new ArrayList<HashMap<String, String>>();
 
     private SeekBar progressBar;
@@ -60,11 +61,14 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
         progressBar = (SeekBar) findViewById(R.id.progressBar);
 
         mediaPlayer = new MediaPlayer();
+        audioManager = new AudioManager();
         handler = new Handler();
         progressHelper = new ProgressHelper();
 
+        audioList = audioManager.getPlayList();
+
         progressBar.setOnSeekBarChangeListener(this);
-        playAudio();
+        playAudio(0);
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,13 +115,16 @@ public class AudioPlayerActivity extends AppCompatActivity implements SeekBar.On
         });
     }
 
-    public void playAudio() {
+    public void playAudio(int audioIndex) {
         try {
+            // Play audio
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath() + "/Music/song.mp3");
+            mediaPlayer.setDataSource(audioList.get(audioIndex).get("audioPath"));
             mediaPlayer.prepare();
             mediaPlayer.start();
-            String audioTitle = "Song";
+
+            // Display audio title
+            String audioTitle = audioList.get(audioIndex).get("audioTitle");
             audioTitleLabel.setText(audioTitle);
             btnPlay.setImageResource(R.drawable.btn_pause); // change button image to pause
 
