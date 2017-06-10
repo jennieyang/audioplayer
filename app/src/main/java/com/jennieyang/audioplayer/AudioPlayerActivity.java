@@ -117,6 +117,30 @@ public class AudioPlayerActivity extends AppCompatActivity implements MediaPlaye
                 }
             }
         });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // play next track if it exists, else loop back to beginning of list and play first track
+                if (currentAudioIndex < audioList.size() - 1) {
+                    playAudio(++currentAudioIndex);
+                } else {
+                    playAudio(0);
+                    currentAudioIndex = 0;
+                }
+            }
+        });
+
+        btnPrevious.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // play previous track if it exists, else skip to end of list and play last track
+                if (currentAudioIndex > 0) {
+                    playAudio(--currentAudioIndex);
+                } else {
+                    playAudio(audioList.size() - 1);
+                    currentAudioIndex = audioList.size() - 1;
+                }
+            }
+        });
     }
 
     public void playAudio(int audioIndex) {
