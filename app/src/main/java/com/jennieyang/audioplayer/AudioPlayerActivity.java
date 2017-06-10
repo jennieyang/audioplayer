@@ -24,6 +24,8 @@ public class AudioPlayerActivity extends AppCompatActivity implements MediaPlaye
     private ImageButton btnBackward;
     private ImageButton btnNext;
     private ImageButton btnPrevious;
+    private ImageButton btnRepeat;
+    private ImageButton btnShuffle;
     private TextView audioTitleLabel;
     private TextView currentPositionLabel;
     private TextView totalDurationLabel;
@@ -37,6 +39,9 @@ public class AudioPlayerActivity extends AppCompatActivity implements MediaPlaye
     private ProgressHelper progressHelper;
     private int SKIP_TIME = 5000; // 5000 milliseconds forward or backwards
     private int currentAudioIndex = 0;
+
+    private boolean isShuffle = false;
+    private boolean isRepeat = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,8 @@ public class AudioPlayerActivity extends AppCompatActivity implements MediaPlaye
         btnBackward = (ImageButton) findViewById(R.id.btnBackward);
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnPrevious = (ImageButton) findViewById(R.id.btnPrevious);
+        btnRepeat = (ImageButton) findViewById(R.id.btnRepeat);
+        btnShuffle = (ImageButton) findViewById(R.id.btnShuffle);
         audioTitleLabel = (TextView) findViewById(R.id.songTitle);
         currentPositionLabel = (TextView) findViewById(R.id.currentPositionLabel);
         totalDurationLabel = (TextView) findViewById(R.id.totalDurationLabel);
@@ -141,6 +148,34 @@ public class AudioPlayerActivity extends AppCompatActivity implements MediaPlaye
                 }
             }
         });
+
+        btnRepeat.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (isRepeat) {
+                    isRepeat = false;
+                    btnRepeat.setImageResource(R.drawable.btn_repeat);
+                } else {
+                    isRepeat = true;
+                    isShuffle = false;
+                    btnRepeat.setImageResource(R.drawable.btn_repeat_pressed);
+                    btnShuffle.setImageResource(R.drawable.btn_shuffle);
+                }
+            }
+        });
+
+        btnShuffle.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (isShuffle) {
+                    isShuffle = false;
+                    btnShuffle.setImageResource(R.drawable.btn_shuffle);
+                } else {
+                    isShuffle = true;
+                    isRepeat = false;
+                    btnShuffle.setImageResource(R.drawable.btn_shuffle_pressed);
+                    btnRepeat.setImageResource(R.drawable.btn_repeat);
+                }
+            }
+        });
     }
 
     public void playAudio(int audioIndex) {
@@ -203,9 +238,22 @@ public class AudioPlayerActivity extends AppCompatActivity implements MediaPlaye
     }
 
     public void onCompletion(MediaPlayer mp) {
-        // play a random song
-        Random rand = new Random();
-        currentAudioIndex = rand.nextInt(audioList.size() - 1);
-        playAudio(currentAudioIndex);
+        if (isRepeat) {
+            // repeat the same track
+            playAudio(currentAudioIndex);
+        } else if (isShuffle) {
+            // play a random track
+            Random rand = new Random();
+            currentAudioIndex = rand.nextInt(audioList.size() - 1);
+            playAudio(currentAudioIndex);
+        } else {
+            // play next track
+            if (currentAudioIndex < audioList.size() - 1) {
+                playAudio(++currentAudioIndex);
+            } else {
+                playAudio(0);
+                currentAudioIndex = 0;
+            }
+        }
     }
 }
